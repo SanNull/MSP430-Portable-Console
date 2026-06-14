@@ -4,6 +4,6 @@
 #define SPI_H
 
 void setUpSpi();
-void spiSend(uint8_t byte);
+void SPI_enviar(uint8_t byte);
 
 #endif

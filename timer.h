@@ -1,5 +1,5 @@
 #include <stdint.h>
-#include "constantes.h"
+#include <stdbool.h>
 
 #ifndef TIMER_H
 #define TIMER_H

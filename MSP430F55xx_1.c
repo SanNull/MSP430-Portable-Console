@@ -2,20 +2,22 @@
 #include "timer.h"
 #include "som.h"
 #include "spi.h"
+#include "adc.h"
 
 int main(void)
 {
   WDTCTL = WDTPW+WDTHOLD;
-  setUpSpi();
-  spiSend(0x55);
-  spiSend(0x00);
+  setUpAdc();
 
   __enable_interrupt();
 
-  NOTAS n = C4;
-  NOTAS n2 = NENHUMA;
   
   while(1){
-    
+      while (!foi) {
+      
+      }
+      volatile int assda;
+      assda = 0;
+      foi = 0;
   }                               
 }

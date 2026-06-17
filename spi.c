@@ -23,6 +23,10 @@ void setUpSpi(){
 }
 
 void SPI_enviar(uint8_t byte){
-    while (!(UCB0IFG & UCTXIFG)); //TX Buffer está vazio?
+    while (UCB0STAT & UCBUSY ); //TX Buffer está vazio?
     UCB0TXBUF = byte;
+}
+
+bool SPI_estaOcupado(){
+    return UCB0STAT & UCBUSY;
 }

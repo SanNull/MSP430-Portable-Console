@@ -3,21 +3,15 @@
 #include "som.h"
 #include "spi.h"
 #include "adc.h"
+#include "lcd.h"
 
 int main(void)
 {
   WDTCTL = WDTPW+WDTHOLD;
-  setUpAdc();
-
   __enable_interrupt();
+  setUpLcd();
 
+  while (1) {
   
-  while(1){
-      while (!foi) {
-      
-      }
-      volatile int assda;
-      assda = 0;
-      foi = 0;
-  }                               
+  }                      
 }

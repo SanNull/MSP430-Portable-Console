@@ -11,8 +11,7 @@ volatile int foi = 0;
 
 void setUpAdc(){
 
-    TA0CTL = TASSEL__ACLK |     //Usa o ACLK: 32768
-                     MC__UP | TACLR;              //Timer parado
+    TA0CTL = TASSEL__ACLK | MC__UP | TACLR;     //Usa o ACLK: 32768
 
     TA0CCTL1 =OUTMOD_2;
 

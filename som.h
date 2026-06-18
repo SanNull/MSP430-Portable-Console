@@ -1,4 +1,6 @@
 #include <stdint.h>
+#include <stdbool.h>
+
 #ifndef SOUND_H
 #define SOUND_H
 
@@ -9,6 +11,7 @@ typedef enum NOTAS {
     C4 = 262
 } NOTAS;
 
-void tocarNota(NOTAS nota, uint16_t ms);
+void SOM_tocarNota(NOTAS nota, uint16_t ms);
+void SOM_habilitarMusica(bool habilitar);
 
 #endif

@@ -10,6 +10,7 @@
 #define CH_2 TB0CCR2
 #define CH_2_PINO BIT4
 
+uint16_t ticks = 0;
 //Duracao do Timer
 
 void setUpPWMT(uint16_t ch0, uint16_t chPrincipal, uint32_t duracao){
@@ -24,11 +25,15 @@ void setUpPWMT(uint16_t ch0, uint16_t chPrincipal, uint32_t duracao){
 
     TIMER_B = TACLR | TASSEL__SMCLK | MC__UP;
     CH_0_CONTROLADOR |= CCIE;
-    CH_2_CONTROLADOR |= OUTMOD_7;
+    CH_2_CONTROLADOR |= OUTMOD_7; //RESET/SET
 }
 
 void PWMT_habilitarPino(bool enable){
     P7SEL = (enable) ? (P7SEL | CH_2_PINO) : (P7SEL & ~CH_2_PINO);
+}
+
+bool PWMT_estaParado(){
+    return ticks == 0;
 }
 
 #pragma vector = TIMER0_B0_VECTOR

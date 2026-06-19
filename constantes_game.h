@@ -1,0 +1,1 @@
+#define ENTIDADES_MAX 10

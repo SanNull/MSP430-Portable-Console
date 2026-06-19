@@ -17,14 +17,22 @@ void ENTIDADE_remover(entidade *entidade){
     entidade = NULL;
 }
 
-void ENTIDADE_moverX(entidade *entidade){
+void ENTIDADE_moverX(entidade *entidade, int8_t direcao){
+    uint16_t novoX = entidade->x + entidade->velocidade * direcao;
+    if (novoX + entidade->tamanho >= LARGURA || novoX >= LARGURA) {
+        return;
+    }
     entidade->xAnterior = entidade->x;
-    entidade->x += entidade->velocidade;
+    entidade->x = novoX;
 }
 
-void ENTIDADE_moverY(entidade *entidade){
+void ENTIDADE_moverY(entidade *entidade, int8_t direcao){
+    uint16_t novoY = entidade->y + entidade->velocidade * direcao;
+    if (novoY + entidade->tamanho >= ALTURA || novoY >= ALTURA) {
+        return;
+    }
     entidade->yAnterior = entidade->y;
-    entidade->y += entidade->velocidade;
+    entidade->y = novoY;
 }
 
 void ENTIDADE_tomarDano(entidade *entidade){

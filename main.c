@@ -13,52 +13,55 @@ int main(void)
   __enable_interrupt();
   setUpLcd();
   setUpAdc();
-  LCD_setCursor(0, 0);
-
+  
   entidade *player  =ENTIDADE_criar(0, 0, 24, 2, 2);
   entidade *inimigo = ENTIDADE_criar(64, 64, 24, 1, 1);
   
+  //fill_screen(0xffff);
   LCD_preencherRectangulo(player->x, player->y, player->tamanho, player->tamanho, 0xff);
   LCD_preencherRectangulo(inimigo->x, inimigo->y, inimigo->tamanho, inimigo->tamanho, 0xf800);
 
-  ENTIDADE_remover(inimigo);
-  inimigo;
-
-  int y = 0;
-  int x = 0;
-
-  int previousX = 0;
-
-
-  int i = 0;
-  y = 0;
+  uint16_t previousX, previousY, i;
 
   while (1) {
-    previousX = x;
-    if(getVRX() > 1500){
+    previousX = player->x;
+    previousY = player->y;
+    if(getVRY() > 1500){
       //Anda pra direita
-      
-      ++x;
+      player->x = (player->x < 240) ? ++player->x : player->x; 
     }
+      else if (getVRY() < -1500){
+        player->x = (player->x > 0 ) ? --player->x : player->x; 
+      }
       else if (getVRX() < -1500){
-        --x;
+       player->y = (player->y < 320) ? ++player->y : player->y; 
+      }
+      else if (getVRX() > 1500){
+        player->y = (player->y > 0) ? --player->y : player->y; 
       }
 
+      ZUMBI_perseguirPlayer(inimigo, player);
+      
     //CleanUp
-    if (previousX != x){
-          for (i = 0; i <= 24; i++) {
-      LCD_setCursor(previousX, y++);
-      draw_pixel(0x00);
+    if (previousX != player->x){
+      if (previousX > player->x){
+        LCD_preencherRectangulo(previousX + player->tamanho, previousY, 1, 25, 0x00);        
+      }
+      else {
+        LCD_preencherRectangulo(previousX, previousY, 1, 25, 0x00);
+      }
     }
-    y = 0;
-    }
-    LCD_setCursor(x, y);
-  for (i = 0; i < 576; i++){
-    if ((i % 24) == 0) {
-      LCD_setCursor(x, ++y);
-    }
-    draw_pixel(0xffc0);
-  }
-  y = 0;
+    else if (previousY!= player->y){
+      if (previousY > player->y){
+        LCD_preencherRectangulo(previousX, previousY + player->tamanho , 25, 1, 0x00);        
+      }
+      else {
+        LCD_preencherRectangulo(previousX, previousY, 25, 1, 0x00);
+      }
+    }    
+
+    //Render
+    LCD_preencherRectangulo(player->x, player->y, player->tamanho, player->tamanho, 0xff);
+    LCD_preencherRectangulo(inimigo->x, inimigo->y, inimigo->tamanho, inimigo->tamanho, 0xf800);
   }                      
 }

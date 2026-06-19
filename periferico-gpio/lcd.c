@@ -14,8 +14,6 @@ static void enviarParametro(uint8_t parametro);
 
 void setXCursor(uint16_t x);
 void setYCursor(uint16_t y);
-
-static void fill_screen(uint16_t color);
 //Code Snippet from 
 // @vilaca: https://gist.github.com/vilaca/1d07fa7ba9afcfe5ad74
 static void initLcd(){
@@ -207,7 +205,7 @@ void LCD_preencherRectangulo(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uin
 	}
 }
 
-static void fill_screen(unsigned int color)
+void fill_screen(unsigned int color)
 {
 	unsigned long tot = MAX_W;
 	tot *= MAX_H;

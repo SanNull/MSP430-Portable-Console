@@ -11,8 +11,11 @@
 
 static void enviarComando(uint8_t comando);
 static void enviarParametro(uint8_t parametro);
-static void fill_screen(unsigned int color);
 
+void setXCursor(uint16_t x);
+void setYCursor(uint16_t y);
+
+static void fill_screen(uint16_t color);
 //Code Snippet from 
 // @vilaca: https://gist.github.com/vilaca/1d07fa7ba9afcfe5ad74
 static void initLcd(){
@@ -67,7 +70,7 @@ static void initLcd(){
 	enviarParametro(0x86); 	// 1. (VCOM offset voltage), 0xC0 def.
 
 	enviarComando(0x36); 	// MEMORY ACCESS CONTROL / Orientation
-	enviarParametro(0x28); 	// 1. ( ), 0x00 def.
+	enviarParametro(0x88); 	// 1. ( ), 0x00 def.
 
 	enviarComando(0x3A);	// COLMOD: PIXEL FORMAT SET
 	enviarParametro(0x55);	// 1. (sets the pixel format for the RGB image data used by the interface, 16bits/pixel)
@@ -137,7 +140,7 @@ void setUpLcd(){
     P3OUT |= RESET + DC;
     P3OUT &= ~CS;
     initLcd();
-    fill_screen(0xff);
+    //fill_screen(0x00);
 }
 
 
@@ -153,22 +156,55 @@ static void enviarParametro(uint8_t parametro){
 	SPI_enviar(parametro);
 }
 
-void setCursor(uint16_t x, uint16_t y){
-
+void LCD_setCursor(uint16_t x, uint16_t y){
+	setXCursor(x);
+	setYCursor(y);
+	//Write to memory
+	enviarComando(0x2C);	
 }
 
-void setRow(uint16_t x) {
-
+void setXCursor(uint16_t x) {
+	if (x >= MAX_W) {
+		return;
+	}
+	//Set Column Cursor 
+	enviarComando(0x2A);
+	enviarParametro(x >> 8); //MSB Start Column
+	enviarParametro(x & 0xff); // LSB
+	//Write to memory
+	enviarComando(0x2C);	
 }
 
-void setColumn(uint16_t y){
-
+void setYCursor(uint16_t y){
+	if (y >= MAX_H){
+		return;
+	}
+	//Set Page Cursor
+	enviarComando(0x2B);
+	enviarParametro(y >> 8); //MSB Start Page
+	enviarParametro(y & 0xff);  // LSB
+	//Write to memory
+	enviarComando(0x2C);	
 }
 
 
-static void draw_pixel(unsigned int color) {
+void draw_pixel(uint16_t color) {
 	enviarParametro( color >> 8);
 	enviarParametro( color & 0xFF);
+}
+
+void LCD_preencherRectangulo(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t cor){
+	if (x >= MAX_W || x + w >= MAX_W || y >= MAX_H || y + h >= MAX_H){
+		return;
+	}
+	LCD_setCursor(x, y);
+	uint16_t i, j;
+	for (j = 0; j < h; j++) {
+		for (i = 0; i < w; i++) {
+			draw_pixel(cor);
+		}
+		LCD_setCursor(x, ++y);
+	}
 }
 
 static void fill_screen(unsigned int color)
@@ -180,15 +216,15 @@ static void fill_screen(unsigned int color)
 	enviarComando(0x2A);
 	enviarParametro( 0);
 	enviarParametro( 0);
-	enviarParametro( (MAX_H-1) >> 8);
-	enviarParametro( (MAX_H-1) & 0xFF);
+	enviarParametro( (MAX_W-1) >> 8);
+	enviarParametro( (MAX_W-1) & 0xFF);
 	enviarComando(0x2C);
 
 	enviarComando(0x2B);
 	enviarParametro( 0);
 	enviarParametro( 0);
-	enviarParametro( (MAX_W-1) >> 8);
-	enviarParametro( (MAX_W-1) & 0xFF);
+	enviarParametro( (MAX_H-1) >> 8);
+	enviarParametro( (MAX_H-1) & 0xFF);
 	enviarComando(0x2C);
 
 	while ( tot > 0)

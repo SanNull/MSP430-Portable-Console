@@ -4,5 +4,5 @@
 extern volatile int foi;
 
 void setUpAdc();
-int16_t getX();
-int16_t getY();
+int16_t getVRX();
+int16_t getVRY();

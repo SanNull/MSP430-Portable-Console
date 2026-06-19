@@ -1,11 +1,11 @@
 #include "adc.h"
 
-//P6.0 - Eixo X, P6.1 Eixo Y
-#define X_PIN BIT0
-#define Y_PIN BIT1
+//P6.0 - Eixo VRX, P6.1 Eixo VRY
+#define XAXIS_PIN BIT0
+#define YAXIS_PIN BIT1
 
-volatile int16_t eixo_x;
-volatile int16_t eixo_y;
+volatile int16_t eixo_x = 0;
+volatile int16_t eixo_y = 0;
 
 volatile int foi = 0;
 
@@ -15,8 +15,8 @@ void setUpAdc(){
 
     TA0CCTL1 =OUTMOD_2;
 
-    TA0CCR0 = 32768;
-    TA0CCR1 = 16384;    
+    TA0CCR0 = 4096;
+    TA0CCR1 = 4096/2;  
 
     P6SEL |= BIT0 + BIT1;    
 
@@ -37,11 +37,11 @@ void setUpAdc(){
     ADC12CTL0 |= ADC12ENC;
 }
 
-int16_t getX(){
+int16_t getVRX(){
     return eixo_x;
 }
 
-int16_t getY(){
+int16_t getVRY(){
     return eixo_y;
 }
 

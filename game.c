@@ -31,8 +31,8 @@ void GAME_init(){
     if (listaEntidades == NULL){
         listaEntidades = malloc(sizeof(entidade) * ENTIDADES_MAX);
     }
-    listaEntidades[idx++] = ENTIDADE_criar(0, 0, 24, 1, 8);
-    listaEntidades[idx++] = ENTIDADE_criar(64, 64, 24, 1, 4);
+    listaEntidades[idx++] = ENTIDADE_criar(0, 0, TAMANHO_SPRITE, 1, 16);
+    listaEntidades[idx++] = ENTIDADE_criar(64, 64, TAMANHO_SPRITE, 1, );
     player = listaEntidades[0];
     estadoAtual = SET;
 }
@@ -88,10 +88,10 @@ static void renderizar(){
         }
         limparFrame(e);
             if (i == 0){
-                LCD_preencherRectangulo(e->x, e->y, e->tamanho, e->tamanho, 0xff);
+                SPRITESHEET_desenharSprite(PLAYER, e->x, e->y);
             }
             else {
-                LCD_preencherRectangulo(e->x, e->y, e->tamanho, e->tamanho, 0xf800);
+                SPRITESHEET_desenharSprite(PLAYER, e->x, e->y);
             }        
     }
 }

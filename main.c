@@ -5,6 +5,7 @@
 #include "periferico-gpio/adc.h"
 #include "periferico-gpio/lcd.h"
 
+#include "spritesheet.h"
 #include "entidade.h"
 #include "game.h"
 

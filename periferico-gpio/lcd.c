@@ -205,6 +205,30 @@ void LCD_preencherRectangulo(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uin
 	}
 }
 
+void LCD_desenharSprite(uint16_t *sprite, uint16_t x, uint16_t y, uint8_t tamanho) {
+	if (x >= MAX_W || x + tamanho >= MAX_W || y >= MAX_H || y + tamanho >= MAX_H){
+		return;
+	}	
+	LCD_setCursor(x, y);
+	uint16_t totalPixels = tamanho * tamanho;
+	uint16_t i = 0;
+	uint8_t pixelColuna = 0; //Variável para saber quando incrementar linha
+	while (totalPixels-- > 0) {
+		if (pixelColuna == tamanho){
+			LCD_setCursor(x, ++y);
+			pixelColuna = 0;
+		}
+		if (sprite[i] == COR_MASCARA){
+			++i;
+			++pixelColuna;
+			LCD_setCursor(pixelColuna + x, y);
+			continue;
+		}
+		LCD_desenharPixel(sprite[i++]);
+		pixelColuna++;
+	}
+}
+
 void LCD_preencherTela(unsigned int color)
 {
 	unsigned long tot = MAX_W;

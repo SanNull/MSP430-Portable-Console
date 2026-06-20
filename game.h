@@ -7,7 +7,7 @@
 #include "constantes.h"
 #include "input.h"
 #include "som.h"
-#include "periferico-gpio/lcd.h" //Todo criar middleware de modo que o jogo esteja desacoplado de hardware?
+#include "spritesheet.h"
 
 #ifndef GAME_H
 #define GAME_H

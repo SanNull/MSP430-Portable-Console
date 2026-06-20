@@ -22,7 +22,6 @@ void ENTIDADE_moverX(entidade *entidade, int8_t direcao){
     if (novoX + entidade->tamanho >= LARGURA || novoX >= LARGURA) {
         return;
     }
-    entidade->xAnterior = entidade->x;
     entidade->x = novoX;
 }
 
@@ -31,8 +30,12 @@ void ENTIDADE_moverY(entidade *entidade, int8_t direcao){
     if (novoY + entidade->tamanho >= ALTURA || novoY >= ALTURA) {
         return;
     }
-    entidade->yAnterior = entidade->y;
     entidade->y = novoY;
+}
+
+void ENTIDADE_salvarPosicao(entidade *entidade){
+    entidade->xAnterior = entidade->x;
+    entidade->yAnterior = entidade->y;
 }
 
 void ENTIDADE_tomarDano(entidade *entidade){

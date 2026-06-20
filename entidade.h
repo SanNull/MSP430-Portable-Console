@@ -21,5 +21,7 @@ void ENTIDADE_remover(entidade *entidade);
 void ENTIDADE_moverX(entidade *entidade, int8_t direcao);
 void ENTIDADE_moverY(entidade *entidade, int8_t direcao);
 void ENTIDADE_tomarDano(entidade *entidade);
+//Salvar posição do frame anterior
+void ENTIDADE_salvarPosicao(entidade *entidade);
 
 #endif

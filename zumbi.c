@@ -34,13 +34,6 @@ void ZUMBI_perseguirPlayer(entidade *zumbi, entidade *player){
 
 bool ZUMBI_tocouPlayer(entidade *zumbi, entidade *player){
     //Todo adicionar limiares para perdoar mais o jogador
-
-    //Checa interseção no eixo X
-    if (zumbi->x >= player->x && zumbi->x <= player->tamanho) {
-        return true;
-    }
-    else if (zumbi->y >= player->y && zumbi->y <= player->tamanho) {
-        return true;
-    }
-    return false;
+    return  (zumbi->x <= player->x + player->tamanho && zumbi->x + zumbi->tamanho >= player->x) &&
+            (zumbi->y <= player->y + player->tamanho && zumbi->y + zumbi->tamanho >= player->y);
 }

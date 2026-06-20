@@ -1,8 +1,8 @@
 #include "input.h"
 
 //Limiares para determinar Direção do joystick
-#define DIRECAO_POSITIVO 1200
-#define DIREACAO_NEGATIVO -1200
+#define DIRECAO_POSITIVO 2000
+#define DIREACAO_NEGATIVO -2000
 
 static int8_t getJoystickX();
 static int8_t getJoystickY();
@@ -31,11 +31,10 @@ int8_t getJoystickX(){
 
 int8_t getJoystickY(){
     int16_t y = getVRX();
-    if (y < -1500){
-        return 1;
-    } 
-    else if (y > 1500){
-        return -1;
+    //Limiar zero
+    if (y > DIREACAO_NEGATIVO && y < DIRECAO_POSITIVO){
+        return  0;
     }
-    return 0;
+    //Verifica se MSB é 1 (numero negativo)
+    return (y & 1 << 15) ? 1: -1;
 }

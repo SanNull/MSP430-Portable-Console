@@ -47,7 +47,7 @@ void GAME_loop(){
             break;
             case GAMEOVER:
             __delay_cycles(100000*2);
-            fill_screen(0x00);
+            LCD_preencherTela(0x00);
             estadoAtual = RESET;
             break;
             case RESET:

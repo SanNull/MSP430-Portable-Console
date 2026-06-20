@@ -14,7 +14,7 @@ int main(void)
   __enable_interrupt();
   setUpLcd();
   setUpAdc();
-  //fill_screen(0x00);
+  //LCD_preencherTela(0x00);
   GAME_init();
   GAME_loop();
                   

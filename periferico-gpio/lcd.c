@@ -138,7 +138,7 @@ void setUpLcd(){
     P3OUT |= RESET + DC;
     P3OUT &= ~CS;
     initLcd();
-    //fill_screen(0x00);
+    //LCD_preencherTela(0x00);
 }
 
 
@@ -186,7 +186,7 @@ void setYCursor(uint16_t y){
 }
 
 
-void draw_pixel(uint16_t color) {
+void LCD_desenharPixel(uint16_t color) {
 	enviarParametro( color >> 8);
 	enviarParametro( color & 0xFF);
 }
@@ -199,13 +199,13 @@ void LCD_preencherRectangulo(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uin
 	uint16_t i, j;
 	for (j = 0; j < h; j++) {
 		for (i = 0; i < w; i++) {
-			draw_pixel(cor);
+			LCD_desenharPixel(cor);
 		}
 		LCD_setCursor(x, ++y);
 	}
 }
 
-void fill_screen(unsigned int color)
+void LCD_preencherTela(unsigned int color)
 {
 	unsigned long tot = MAX_W;
 	tot *= MAX_H;
@@ -227,7 +227,7 @@ void fill_screen(unsigned int color)
 
 	while ( tot > 0)
 	{
-		draw_pixel(color);
+		LCD_desenharPixel(color);
 		tot--;
 	}
 }

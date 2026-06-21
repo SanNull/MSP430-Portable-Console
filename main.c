@@ -18,11 +18,15 @@ int main(void)
   UCSCTL3 = SELREF_2; //REFCLK 32K
   UCSCTL4 |= SELS_2; //SMLCK = REFO//     
 
+    setUpBotoes();
   __enable_interrupt();
-  setUpLcd();
-  setUpAdc();
-  //LCD_preencherTela(0x00);
-  GAME_init();
-  GAME_loop();
+  while (1) {
+  
+  }
+  // setUpLcd();
+  // setUpAdc();
+  // //LCD_preencherTela(0x00);
+  // GAME_init();
+  // GAME_loop();
                   
 }

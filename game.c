@@ -32,7 +32,7 @@ void GAME_init(){
         listaEntidades = malloc(sizeof(entidade) * ENTIDADES_MAX);
     }
     listaEntidades[idx++] = ENTIDADE_criar(0, 0, TAMANHO_SPRITE, 1, 16);
-    listaEntidades[idx++] = ENTIDADE_criar(64, 64, TAMANHO_SPRITE, 1, );
+    listaEntidades[idx++] = ENTIDADE_criar(64, 64, TAMANHO_SPRITE, 1,8 );
     player = listaEntidades[0];
     estadoAtual = SET;
 }

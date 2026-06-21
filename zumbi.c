@@ -8,20 +8,20 @@ void ZUMBI_perseguirPlayer(entidade *zumbi, entidade *player){
     }
 
     if (zumbi->x > player->x){
-        ENTIDADE_moverX(zumbi, -1);
+        ENTIDADE_moverX(zumbi, -1, VELOCIDADE_ZUMBI);
         return;
     }
     else if (zumbi->x < player->x){
-        ENTIDADE_moverX(zumbi, 1);
+        ENTIDADE_moverX(zumbi, 1, VELOCIDADE_ZUMBI);
         return;
     }
 
     if (zumbi->y > player->y){
-        ENTIDADE_moverY(zumbi, -1);
+        ENTIDADE_moverY(zumbi, -1, VELOCIDADE_ZUMBI);
         return;
     }
     else if (zumbi->y < player->y){
-        ENTIDADE_moverY(zumbi, 1);
+        ENTIDADE_moverY(zumbi, 1, VELOCIDADE_ZUMBI);
         return;
     }    
 
@@ -34,6 +34,6 @@ void ZUMBI_perseguirPlayer(entidade *zumbi, entidade *player){
 
 bool ZUMBI_tocouPlayer(entidade *zumbi, entidade *player){
     //Todo adicionar limiares para perdoar mais o jogador
-    return  (zumbi->x <= player->x + player->tamanho && zumbi->x + zumbi->tamanho >= player->x) &&
-            (zumbi->y <= player->y + player->tamanho && zumbi->y + zumbi->tamanho >= player->y);
+    return  (zumbi->x <= player->x + TAMANHO_SPRITE && zumbi->x + TAMANHO_SPRITE >= player->x) &&
+            (zumbi->y <= player->y + TAMANHO_SPRITE && zumbi->y + TAMANHO_SPRITE >= player->y);
 }

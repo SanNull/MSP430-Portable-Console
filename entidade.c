@@ -1,33 +1,16 @@
 #include "entidade.h"
 
-entidade *ENTIDADE_criar(uint16_t x, uint16_t y, uint16_t tamanho, uint8_t vida, uint8_t velocidade){
-    entidade *e = malloc(sizeof(entidade));
-    e->x = x;
-    e->y = y;
-    e->xAnterior = x;
-    e->yAnterior = y;
-    e->tamanho = tamanho;
-    e->vida = vida;
-    e->velocidade = velocidade;
-    return  e;
-}
-
-void ENTIDADE_remover(entidade *entidade){
-    free(entidade);
-    entidade = NULL;
-}
-
-void ENTIDADE_moverX(entidade *entidade, int8_t direcao){
-    uint16_t novoX = entidade->x + entidade->velocidade * direcao;
-    if (novoX + entidade->tamanho >= LARGURA || novoX >= LARGURA) {
+void ENTIDADE_moverX(entidade *entidade, int8_t direcao, int8_t velocidade){
+    uint16_t novoX = entidade->x + velocidade * direcao;
+    if (novoX + TAMANHO_SPRITE >= LARGURA || novoX >= LARGURA) {
         return;
     }
     entidade->x = novoX;
 }
 
-void ENTIDADE_moverY(entidade *entidade, int8_t direcao){
-    uint16_t novoY = entidade->y + entidade->velocidade * direcao;
-    if (novoY + entidade->tamanho >= ALTURA || novoY >= ALTURA) {
+void ENTIDADE_moverY(entidade *entidade, int8_t direcao, int8_t velocidade){
+    uint16_t novoY = entidade->y + velocidade * direcao;
+    if (novoY + TAMANHO_SPRITE >= ALTURA || novoY >= ALTURA) {
         return;
     }
     entidade->y = novoY;
@@ -39,5 +22,7 @@ void ENTIDADE_salvarPosicao(entidade *entidade){
 }
 
 void ENTIDADE_tomarDano(entidade *entidade){
-    --entidade->vida;
+    //Leva entidade pra fora do mapa
+    entidade->x = UINT16_MAX;
+    entidade->y = UINT16_MAX;
 }

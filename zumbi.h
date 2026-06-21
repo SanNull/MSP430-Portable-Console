@@ -1,5 +1,6 @@
 #include "entidade.h"
 #include <stdbool.h>
+#include "constantes.h" 
 #ifndef  ZUMBI_H
 #define ZUMBI_H
 

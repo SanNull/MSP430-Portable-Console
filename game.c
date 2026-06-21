@@ -1,8 +1,15 @@
 #include "game.h"
 
-entidade **listaEntidades = NULL;
+entidade listaEntidades[ENTIDADES_MAX] = {
+    {.x = 0, .y = 0, .yAnterior = 0, .xAnterior = 0}, //Jogador
+    //Zumbi
+     {.x = 64, .y = 64, .yAnterior = 64, .xAnterior = 64},
+      {.x = UINT16_MAX, .y = UINT16_MAX, .yAnterior = UINT16_MAX, .xAnterior = UINT16_MAX},
+       {.x = UINT16_MAX, .y = UINT16_MAX, .yAnterior = UINT16_MAX, .xAnterior = UINT16_MAX},
+        {.x = UINT16_MAX, .y = UINT16_MAX, .yAnterior = UINT16_MAX, .xAnterior = UINT16_MAX}, 
+};
+
 entidade *player;
-uint8_t idx = 0;
 
 typedef enum Estados {
     SET,
@@ -29,12 +36,7 @@ static void reset();
 
 void GAME_init(){
     LCD_preencherTela(0x00);
-    if (listaEntidades == NULL){
-        listaEntidades = malloc(sizeof(entidade) * ENTIDADES_MAX);
-    }
-    listaEntidades[idx++] = ENTIDADE_criar(0, 0, TAMANHO_SPRITE, 1, 8);
-    listaEntidades[idx++] = ENTIDADE_criar(64, 64, TAMANHO_SPRITE, 1, 0 ); //BUG MEMORIA OVERLFOW
-    player = listaEntidades[0];
+    player = &listaEntidades[0];
     estadoAtual = SET;
     setUpSpawner();
 }
@@ -48,7 +50,7 @@ void GAME_loop(){
             renderizar();
             break;
             case GAMEOVER:
-            __delay_cycles(100000*2);
+            __delay_cycles(500000*2);
             LCD_preencherTela(0x00);
             estadoAtual = RESET;
             break;
@@ -69,11 +71,11 @@ static void input(){
 
     //Prioriza Eixo X
     if (dirX != 0 && dirY != 0) {
-        ENTIDADE_moverX(player, dirX);
+        ENTIDADE_moverX(player, dirX, VELOCIDADE_PLAYER);
         return;
     }
-    ENTIDADE_moverX(player, dirX);
-    ENTIDADE_moverY(player, dirY);
+    ENTIDADE_moverX(player, dirX, VELOCIDADE_PLAYER);
+    ENTIDADE_moverY(player, dirY, VELOCIDADE_PLAYER);
 
 }
 
@@ -83,18 +85,34 @@ static void processar(){
     playerProcess();
     uint16_t *v = SPAWN_podeSpawnar(); 
     if (v != NULL){
+        uint8_t i = 1;
+        entidade *e = NULL;
+        for (i = 1; i < ENTIDADES_MAX; i++) {
+            e = &listaEntidades[i];
+            if (e->x == UINT16_MAX && e->y == UINT16_MAX){
+                break;
+            }
+            else {
+                e = NULL;
+            }
+        }
+        if (e != NULL){
+            e->x = v[0];
+            e->y = v[1];
+            e->xAnterior = v[0];
+            e->yAnterior = v[1];
+        }
         v = NULL;
-        listaEntidades[idx++] = ENTIDADE_criar(0, 284, TAMANHO_SPRITE, 1, 2 );
     }
 }
 
 static void renderizar(){
     int8_t i;
     entidade *e;
-    for (i = 0; i < idx; i++){
-        e = listaEntidades[i];
-        if (e->vida == 0){
-            LCD_preencherRectangulo(e->x, e->y, e->tamanho, e->tamanho, 0x00);
+    for (i = 0; i < ENTIDADES_MAX; i++){
+        e = &listaEntidades[i];
+        if (e->x == UINT16_MAX && e->y == UINT16_MAX){
+            LCD_preencherRectangulo(e->x, e->y, TAMANHO_SPRITE, TAMANHO_SPRITE, 0x00);
             continue;            
         }
         limparFrame(e);
@@ -109,10 +127,10 @@ static void renderizar(){
 
 static void limparFrame(entidade *e){
     if (e->x != e->xAnterior){
-        LCD_preencherRectangulo(e->xAnterior, e->y, e->tamanho, e->tamanho, 0x00);
+        LCD_preencherRectangulo(e->xAnterior, e->y, TAMANHO_SPRITE, TAMANHO_SPRITE, 0x00);
     }
     else if (e->y != e->yAnterior) {
-        LCD_preencherRectangulo(e->x, e->yAnterior, e->tamanho, e->tamanho, 0x00);
+        LCD_preencherRectangulo(e->x, e->yAnterior, TAMANHO_SPRITE, TAMANHO_SPRITE, 0x00);
     } 
 }
 
@@ -121,9 +139,9 @@ static void limparFrame(entidade *e){
 static void zumbiProcess(){
     int8_t i;
     entidade *zumbi;
-    for (i = 1; i < idx; i++) {
-        zumbi = listaEntidades[i];
-        if (zumbi->vida == 0) {
+    for (i = 1; i < ENTIDADES_MAX; i++) {
+        zumbi = &listaEntidades[i];
+        if (zumbi->x == UINT16_MAX && zumbi->y == UINT16_MAX) {
             continue;
         }
         ENTIDADE_salvarPosicao(zumbi);
@@ -136,7 +154,7 @@ static void zumbiProcess(){
 }
 
 static void playerProcess(){
-    if (player->vida == 0){
+    if (player->x == UINT16_MAX && player->y == UINT16_MAX){
         estadoAtual = GAMEOVER;
         SOM_tocarNota(C4, 1000);
     }
@@ -150,10 +168,18 @@ static void balaProcess(){
 
 static void reset() {
     int8_t i;
-    for ( i = 0; i < idx; i++){
-        ENTIDADE_remover(listaEntidades[i]);    
+    entidade *e = &listaEntidades[0];
+    e->x = 0;
+    e->y = 0;
+    e->xAnterior = 0;
+    e->yAnterior = 0;
+    for ( i = 1; i < ENTIDADES_MAX; i++){
+       e = &listaEntidades[i];
+        e->x = UINT16_MAX;
+        e->y = UINT16_MAX;
+        e->xAnterior = UINT16_MAX;
+        e->yAnterior = UINT16_MAX;       
     }
-    idx = 0;
     player = NULL;
     GAME_init();
 }

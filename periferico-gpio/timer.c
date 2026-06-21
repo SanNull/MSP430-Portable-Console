@@ -45,7 +45,11 @@ void setUpTA(uint16_t duracao){
     TA0CCTL0 |= CCIE;
 }
 bool TA_flagUp(){
-    return taFlag;
+    bool flag = taFlag;
+    if (taFlag){
+        taFlag = false;
+    }
+    return flag;
 }
 
 #pragma vector = TIMER0_B0_VECTOR
@@ -61,6 +65,7 @@ __interrupt void PWMT_isr(){
 
 #pragma vector = TIMER0_A0_VECTOR
 __interrupt void TA_isr(){
+    TA0CTL = TACLR | TASSEL__ACLK | MC__UP | ID_3;
+    TA0CCR0 = 0xffff;
     taFlag = true;
-    TA0CTL |= MC__STOP;
 }

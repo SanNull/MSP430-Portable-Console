@@ -11,15 +11,10 @@ typedef struct entidade {
     uint16_t y;
     uint16_t xAnterior;
     uint16_t yAnterior;
-    uint16_t tamanho;    
-    uint8_t vida;
-    uint8_t velocidade;
 }entidade;
 
-entidade *ENTIDADE_criar(uint16_t x, uint16_t y, uint16_t tamanho, uint8_t vida, uint8_t velocidade);
-void ENTIDADE_remover(entidade *entidade);
-void ENTIDADE_moverX(entidade *entidade, int8_t direcao);
-void ENTIDADE_moverY(entidade *entidade, int8_t direcao);
+void ENTIDADE_moverX(entidade *entidade, int8_t direcao, int8_t velocidade);
+void ENTIDADE_moverY(entidade *entidade, int8_t direcao, int8_t velocidade);
 void ENTIDADE_tomarDano(entidade *entidade);
 //Salvar posição do frame anterior
 void ENTIDADE_salvarPosicao(entidade *entidade);

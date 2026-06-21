@@ -1,9 +1,9 @@
 #include <msp430.h>
 #include "periferico-gpio/timer.h"
-#include "som.h"
 #include "periferico-gpio/spi.h"
 #include "periferico-gpio/adc.h"
 #include "periferico-gpio/lcd.h"
+#include "middleware/som.h"
 
 #include "spritesheet.h"
 #include "entidade.h"

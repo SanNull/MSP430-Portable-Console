@@ -1,6 +1,6 @@
 #include <msp430.h>
 #include <stdint.h>
-#include "./constantes.h"
+#include "./src/constantes.h"
 
 void setUpLcd();
 void LCD_setCursor(uint16_t x, uint16_t y);

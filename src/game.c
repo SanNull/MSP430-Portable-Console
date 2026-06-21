@@ -3,13 +3,17 @@
 entidade listaEntidades[ENTIDADES_MAX] = {
     {.x = 0, .y = 0, .yAnterior = 0, .xAnterior = 0}, //Jogador
     //Zumbi
-     {.x = 64, .y = 64, .yAnterior = 64, .xAnterior = 64},
+     {.x = UINT16_MAX, .y = UINT16_MAX, .yAnterior = UINT16_MAX, .xAnterior = UINT16_MAX},
       {.x = UINT16_MAX, .y = UINT16_MAX, .yAnterior = UINT16_MAX, .xAnterior = UINT16_MAX},
        {.x = UINT16_MAX, .y = UINT16_MAX, .yAnterior = UINT16_MAX, .xAnterior = UINT16_MAX},
         {.x = UINT16_MAX, .y = UINT16_MAX, .yAnterior = UINT16_MAX, .xAnterior = UINT16_MAX}, 
+        {.x = UINT16_MAX, .y = UINT16_MAX, .yAnterior = UINT16_MAX, .xAnterior = UINT16_MAX} //Bala
 };
 
+
 entidade *player;
+uint8_t direcaoBala = 0;
+uint8_t direcaoYBala = 0;
 
 typedef enum Estados {
     SET,
@@ -68,6 +72,17 @@ static void input(){
     int8_t dirY = INPUT_getY();
 
     //Bala
+
+    if (INPUT_getAction()){
+        entidade *bala = &listaEntidades[ENTIDADES_MAX - 1];
+        if (bala->x == UINT16_MAX && bala->y == UINT16_MAX) {
+            bala->x = player->x;
+            bala->y = player->y + TAMANHO_SPRITE;
+            bala->xAnterior = player->x + TAMANHO_SPRITE;
+            bala->yAnterior = player->y;
+            direcaoYBala = 1;
+        }
+    }
 
     //Prioriza Eixo X
     if (dirX != 0 && dirY != 0) {
@@ -139,7 +154,7 @@ static void limparFrame(entidade *e){
 static void zumbiProcess(){
     int8_t i;
     entidade *zumbi;
-    for (i = 1; i < ENTIDADES_MAX; i++) {
+    for (i = 1; i < ENTIDADES_MAX - 1; i++) {
         zumbi = &listaEntidades[i];
         if (zumbi->x == UINT16_MAX && zumbi->y == UINT16_MAX) {
             continue;
@@ -149,6 +164,10 @@ static void zumbiProcess(){
         if (ZUMBI_tocouPlayer(zumbi, player)){
             ENTIDADE_tomarDano(player);
             break;
+        }
+        else if (ZUMBI_tocouPlayer(zumbi, &listaEntidades[ENTIDADES_MAX-1])) {
+            ENTIDADE_tomarDano(zumbi);
+            ENTIDADE_tomarDano( &listaEntidades[ENTIDADES_MAX-1]);
         }
     }
 }
@@ -161,7 +180,19 @@ static void playerProcess(){
 }
 
 static void balaProcess(){
-
+    ENTIDADE_salvarPosicao(&listaEntidades[ENTIDADES_MAX-1]);
+    if (direcaoBala == 0 && direcaoYBala == 0){
+        return;
+    }
+    if (direcaoBala){
+        ENTIDADE_moverX(&listaEntidades[ENTIDADES_MAX-1], direcaoBala, 12);
+    }
+    else {
+        ENTIDADE_moverY(&listaEntidades[ENTIDADES_MAX-1], direcaoYBala, 12);
+    }
+    if (listaEntidades[ENTIDADES_MAX-1].x >= LARGURA || listaEntidades[ENTIDADES_MAX-1].x < 0) {
+        ENTIDADE_tomarDano(&listaEntidades[ENTIDADES_MAX-1]);
+    }
 }
 
 ///////////////////////////////////////

@@ -5,7 +5,7 @@
 #define ALTURA 320
 
 //Constantes Jogo
-#define ENTIDADES_MAX 5
+#define ENTIDADES_MAX 6
 typedef enum SpritesheetIdx {
     PLAYER,
     ZUMBI,

@@ -6,5 +6,4 @@
 
 void ZUMBI_perseguirPlayer(entidade *zumbi, entidade *player);
 bool ZUMBI_tocouPlayer(entidade *zumbi, entidade *player);
-
 #endif

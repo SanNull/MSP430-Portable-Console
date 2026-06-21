@@ -5,10 +5,10 @@
 #include "entidade.h"
 #include "zumbi.h"
 #include "constantes.h"
-#include "input.h"
-#include "som.h"
 #include "spritesheet.h"
 #include "spawner.h"
+
+#include "middleware/som.h"
 
 #ifndef GAME_H
 #define GAME_H

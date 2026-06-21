@@ -12,6 +12,12 @@
 int main(void)
 {
   WDTCTL = WDTPW+WDTHOLD;
+  //Mudar clock
+  UCSCTL1 = DCORSEL_5; //Select DCO range 16MHz operation
+  UCSCTL2 |= (249*2);   //Calcula pra gerar  clk de 16mhz
+  UCSCTL3 = SELREF_2; //REFCLK 32K
+  UCSCTL4 |= SELS_2; //SMLCK = REFO//     
+
   __enable_interrupt();
   setUpLcd();
   setUpAdc();

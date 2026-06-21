@@ -13,20 +13,18 @@ int main(void)
 {
   WDTCTL = WDTPW+WDTHOLD;
   //Mudar clock
-  UCSCTL1 = DCORSEL_5; //Select DCO range 16MHz operation
+  UCSCTL1 = DCORSEL_5; // DCO range para ficar num limiar que aceita 16mhz
   UCSCTL2 |= (249*2);   //Calcula pra gerar  clk de 16mhz
   UCSCTL3 = SELREF_2; //REFCLK 32K
   UCSCTL4 |= SELS_2; //SMLCK = REFO//     
 
-    setUpBotoes();
   __enable_interrupt();
-  while (1) {
-  
-  }
-  // setUpLcd();
-  // setUpAdc();
+
+  setUpLcd();
+  setUpBotoes();
+  setUpAdc();
   // //LCD_preencherTela(0x00);
-  // GAME_init();
-  // GAME_loop();
+  GAME_init();
+  GAME_loop();
                   
 }

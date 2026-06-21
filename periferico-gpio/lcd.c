@@ -75,7 +75,7 @@ static void initLcd(){
 
 	enviarComando(0xB1);	// FRAME RATE CONTROL (IN NORMAL MODE / FULL COLORS)
 	enviarParametro(0x00);	// 1. (division ratio for internal clocks when Normal mode), default
-	enviarParametro(0x18);	// 2. (frame frequency, 79Hz), 0x1B def. (70Hz)
+	enviarParametro(0x1F);	// 2. (frame frequency, 79Hz), 0x1B def. (70Hz)
 
 	enviarComando(0xB6); 	// DISPLAY FUNCTION CONTROL
 	enviarParametro(0x08);	// 1. (), 0x0A def.
@@ -231,10 +231,8 @@ void LCD_desenharSprite(uint16_t *sprite, uint16_t x, uint16_t y, uint8_t tamanh
 
 void LCD_preencherTela(unsigned int color)
 {
-	unsigned long tot = MAX_W;
-	tot *= MAX_H;
-	tot++;
-
+	uint16_t altura = MAX_H;
+	uint16_t largura = MAX_W;
 	enviarComando(0x2A);
 	enviarParametro( 0);
 	enviarParametro( 0);
@@ -249,9 +247,11 @@ void LCD_preencherTela(unsigned int color)
 	enviarParametro( (MAX_H-1) & 0xFF);
 	enviarComando(0x2C);
 
-	while ( tot > 0)
+	while ( altura--)
 	{
-		LCD_desenharPixel(color);
-		tot--;
+		while (largura--) {
+			LCD_desenharPixel(color);
+		}
+		largura = MAX_W;
 	}
 }

@@ -15,7 +15,6 @@ volatile uint8_t yInput = 0;
 volatile bool action = 0;
 
 void setUpBotoes(){
-    habilitado = true;
     P1SEL &= ~(BITS_BOTOES);
     P1DIR &= ~(BITS_BOTOES);
     //Resitor de Pulldown

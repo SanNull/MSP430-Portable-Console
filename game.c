@@ -32,7 +32,7 @@ void GAME_init(){
         listaEntidades = malloc(sizeof(entidade) * ENTIDADES_MAX);
     }
     listaEntidades[idx++] = ENTIDADE_criar(0, 0, TAMANHO_SPRITE, 1, 8);
-    listaEntidades[idx++] = ENTIDADE_criar(64, 64, TAMANHO_SPRITE, 1,4 );
+    listaEntidades[idx++] = ENTIDADE_criar(64, 64, TAMANHO_SPRITE, 1, 2 );
     player = listaEntidades[0];
     estadoAtual = SET;
 }
@@ -62,6 +62,9 @@ static void input(){
     ENTIDADE_salvarPosicao(player);
     int8_t dirX = INPUT_getX();
     int8_t dirY = INPUT_getY();
+
+    //Bala
+
     //Prioriza Eixo X
     if (dirX != 0 && dirY != 0) {
         ENTIDADE_moverX(player, dirX);
@@ -69,6 +72,7 @@ static void input(){
     }
     ENTIDADE_moverX(player, dirX);
     ENTIDADE_moverY(player, dirY);
+
 }
 
 static void processar(){

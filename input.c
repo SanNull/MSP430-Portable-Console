@@ -10,13 +10,19 @@ static int8_t getDpadX();
 static int8_t getDpadY();
 
 int8_t INPUT_getX(){
-    int8_t x = getJoystickX();
-    return  x;
+    int8_t xJoy = getJoystickX();
+    int8_t xBtn = BOTOES_getX();
+    return  (xJoy != 0) ? xJoy : xBtn;
 }
 
 int8_t INPUT_getY() {
-    int8_t y = getJoystickY();
-    return y;
+    int8_t yJoy = getJoystickY();
+    int8_t yBtn = BOTOES_getY();
+    return  (yJoy != 0) ? yJoy : yBtn;
+}
+
+bool INPUT_getAction(){
+    return BOTOES_getAction();
 }
 
 int8_t getJoystickX(){

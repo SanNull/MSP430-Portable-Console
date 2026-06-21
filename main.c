@@ -12,11 +12,15 @@
 int main(void)
 {
   WDTCTL = WDTPW+WDTHOLD;
+    setUpBotoes();
   __enable_interrupt();
-  setUpLcd();
-  setUpAdc();
-  //LCD_preencherTela(0x00);
-  GAME_init();
-  GAME_loop();
+  while (1) {
+  
+  }
+  // setUpLcd();
+  // setUpAdc();
+  // //LCD_preencherTela(0x00);
+  // GAME_init();
+  // GAME_loop();
                   
 }

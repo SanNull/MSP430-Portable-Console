@@ -8,6 +8,7 @@
 #include "input.h"
 #include "som.h"
 #include "spritesheet.h"
+#include "spawner.h"
 
 #ifndef GAME_H
 #define GAME_H

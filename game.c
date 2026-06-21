@@ -28,13 +28,15 @@ static void gameover();
 static void reset();
 
 void GAME_init(){
+    LCD_preencherTela(0x00);
     if (listaEntidades == NULL){
         listaEntidades = malloc(sizeof(entidade) * ENTIDADES_MAX);
     }
     listaEntidades[idx++] = ENTIDADE_criar(0, 0, TAMANHO_SPRITE, 1, 8);
-    listaEntidades[idx++] = ENTIDADE_criar(64, 64, TAMANHO_SPRITE, 1, 2 );
+    listaEntidades[idx++] = ENTIDADE_criar(64, 64, TAMANHO_SPRITE, 1, 0 ); //BUG MEMORIA OVERLFOW
     player = listaEntidades[0];
     estadoAtual = SET;
+    setUpSpawner();
 }
 
 void GAME_loop(){
@@ -79,6 +81,11 @@ static void processar(){
     balaProcess();
     zumbiProcess(); //Perseguiçao dos zumbis
     playerProcess();
+    uint16_t *v = SPAWN_podeSpawnar(); 
+    if (v != NULL){
+        v = NULL;
+        listaEntidades[idx++] = ENTIDADE_criar(0, 284, TAMANHO_SPRITE, 1, 2 );
+    }
 }
 
 static void renderizar(){

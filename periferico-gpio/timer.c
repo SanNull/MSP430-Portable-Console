@@ -13,6 +13,8 @@
 uint16_t ticks = 0;
 //Duracao do Timer
 
+bool taFlag = false;
+
 void setUpPWMT(uint16_t ch0, uint16_t chPrincipal, uint32_t duracao){
 
     P7DIR |= CH_2_PINO;
@@ -36,11 +38,29 @@ bool PWMT_estaParado(){
     return ticks == 0;
 }
 
+void setUpTA(uint16_t duracao){
+    taFlag = false;
+    TA0CTL = TACLR | TASSEL__ACLK | MC__UP | ID_1;
+    TA0CCR0 = duracao;
+    TA0CCTL0 |= CCIE;
+}
+bool TA_flagUp(){
+    return taFlag;
+}
+
 #pragma vector = TIMER0_B0_VECTOR
 __interrupt void PWMT_isr(){
-    --ticks;
+    if (ticks != 0){
+        --ticks;
+    }
     if (ticks == 0){
         TIMER_B |= MC__STOP;
         P7SEL &= ~CH_2_PINO;
     }
+}
+
+#pragma vector = TIMER0_A0_VECTOR
+__interrupt void TA_isr(){
+    taFlag = true;
+    TA0CTL |= MC__STOP;
 }

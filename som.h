@@ -4,7 +4,7 @@
 #ifndef SOUND_H
 #define SOUND_H
 
-#define CPU_CLK 1000000L
+#define CPU_CLK 16000000L
 
 typedef enum NOTAS {
     NENHUMA = 0,

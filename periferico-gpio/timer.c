@@ -40,9 +40,9 @@ bool PWMT_estaParado(){
 
 void setUpTA(uint16_t duracao){
     taFlag = false;
-    TA0CTL = TACLR | TASSEL__ACLK | MC__UP | ID_1;
-    TA0CCR0 = duracao;
-    TA0CCTL0 |= CCIE;
+    TA1CTL = TACLR | TASSEL__ACLK | MC__UP | ID_1;
+    TA1CCR0 = duracao;
+    TA1CCTL0 |= CCIE;
 }
 bool TA_flagUp(){
     bool flag = taFlag;
@@ -50,6 +50,15 @@ bool TA_flagUp(){
         taFlag = false;
     }
     return flag;
+}
+
+void setupADCTimer(){
+    TA0CTL = TASSEL__ACLK | MC__UP | TACLR;     //Usa o ACLK: 32768
+
+    TA0CCTL1 =OUTMOD_2;
+
+    TA0CCR0 = 4096;
+    TA0CCR1 = 4096/2; 
 }
 
 #pragma vector = TIMER0_B0_VECTOR
@@ -63,9 +72,9 @@ __interrupt void PWMT_isr(){
     }
 }
 
-#pragma vector = TIMER0_A0_VECTOR
+#pragma vector = TIMER1_A0_VECTOR
 __interrupt void TA_isr(){
-    TA0CTL = TACLR | TASSEL__ACLK | MC__UP | ID_3;
-    TA0CCR0 = 0xffff;
+    TA1CTL = TACLR | TASSEL__ACLK | MC__UP | ID_3;
+    TA1CCR0 = 0xffff;
     taFlag = true;
 }

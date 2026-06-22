@@ -14,6 +14,7 @@ typedef enum SpritesheetIdx {
 
 #define VELOCIDADE_ZUMBI 2
 #define VELOCIDADE_PLAYER 6
+#define VELOCIDADE_BALA 16
 
 //Constantes Gerais
 #define TAMANHO_SPRITE 32

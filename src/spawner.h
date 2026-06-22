@@ -6,7 +6,7 @@
 #define SPAWNER_H
 
 void setUpSpawner();
-//Retorna localização do inimigo caso seja momento de spawnar um
-uint16_t* SPAWN_podeSpawnar();
-
+bool SPAWN_podeSpawnar();
+uint16_t SPAWN_localX();
+uint16_t SPAWN_localY();
 #endif

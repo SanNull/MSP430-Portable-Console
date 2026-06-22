@@ -37,3 +37,15 @@ bool ZUMBI_tocouPlayer(entidade *zumbi, entidade *player){
     return  (zumbi->x <= player->x + TAMANHO_SPRITE && zumbi->x + TAMANHO_SPRITE >= player->x) &&
             (zumbi->y <= player->y + TAMANHO_SPRITE && zumbi->y + TAMANHO_SPRITE >= player->y);
 }
+
+entidade *ZUMBI_disponivel(entidade *lista){
+    uint8_t i = 1;
+    entidade *e;
+    for (i = 1; i < ENTIDADES_MAX - 1; i++) {
+        e = &lista[i];
+        if (ENTIDADE_disponivel(e)) {
+            return  e;
+        }
+    }
+    return NULL;
+}

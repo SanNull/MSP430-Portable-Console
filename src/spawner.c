@@ -2,6 +2,12 @@
 
 #define MEIO_ALTURA 160
 #define MEIO_LARGURA 120
+#define FIM_ALTURA 320 - 40
+#define INICIO_ALTURA 0
+#define FIM_LARGURA 200
+
+uint16_t posX = 0;
+uint16_t posY = 0;
 
 typedef enum Posicoes {
     CIMA,
@@ -11,23 +17,45 @@ typedef enum Posicoes {
 } Posicoes;
 
 Posicoes spawnPosicao = BAIXO;
-uint16_t vetor[2] = {0x0, 0x0};
 
 void setUpSpawner(){
     setUpTA(0xffff);
 }
 
-uint16_t *SPAWN_podeSpawnar(){
+bool SPAWN_podeSpawnar(){
     if (!TA_flagUp()){
-        return NULL;
+        return false;
     }
-    vetor[0] = 0; 
-    vetor[1] = 0;
+    posX = 0; 
+    posY = 0;
     switch (spawnPosicao) {
         case BAIXO:
-        vetor[0] = 0;
-        vetor[1] = 284;
+        posX = MEIO_LARGURA;
+        posY = FIM_ALTURA;
+        spawnPosicao = CIMA;
+        break;
+        case CIMA:
+        posX = MEIO_LARGURA;
+        posY = INICIO_ALTURA;
+        spawnPosicao = ESQUERDA;
+        break;
+        case ESQUERDA:
+        posX = 0;
+        posY = MEIO_ALTURA;
+        spawnPosicao = DIREITA;
+        break;
+        case DIREITA:
+        posX = FIM_LARGURA;
+        posY = MEIO_ALTURA;
+        spawnPosicao = BAIXO;
         break;
     }
-    return vetor;
+    return true;
+}
+
+uint16_t SPAWN_localX() {
+    return  posX;
+}
+uint16_t SPAWN_localY() {
+    return  posY;
 }

@@ -10,13 +10,8 @@ volatile int16_t eixo_y = 0;
 volatile int foi = 0;
 
 void setUpAdc(){
-
-    TA0CTL = TASSEL__ACLK | MC__UP | TACLR;     //Usa o ACLK: 32768
-
-    TA0CCTL1 =OUTMOD_2;
-
-    TA0CCR0 = 4096;
-    TA0CCR1 = 4096/2;  
+ 
+    setupADCTimer();
 
     P6SEL |= BIT0 + BIT1;    
 

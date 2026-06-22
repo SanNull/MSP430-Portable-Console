@@ -1,5 +1,6 @@
 #include <msp430.h>
 #include <stdint.h>
+#include "timer.h"
 
 extern volatile int foi;
 

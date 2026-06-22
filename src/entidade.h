@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include "constantes.h"
 #include "helpers.h"
@@ -13,10 +14,18 @@ typedef struct entidade {
     uint16_t yAnterior;
 }entidade;
 
+extern entidade listaEntidades[ENTIDADES_MAX];
+
 void ENTIDADE_moverX(entidade *entidade, int8_t direcao, int8_t velocidade);
 void ENTIDADE_moverY(entidade *entidade, int8_t direcao, int8_t velocidade);
 void ENTIDADE_tomarDano(entidade *entidade);
 //Salvar posição do frame anterior
 void ENTIDADE_salvarPosicao(entidade *entidade);
+
+void ENTIDADE_habilitar(entidade *entidade, uint16_t x, uint16_t y);
+void ENTIDADE_desabilitar(entidade *entidade);
+
+//Checa se na lista há entidade habilitada
+bool ENTIDADE_disponivel(entidade *entidade);
 
 #endif

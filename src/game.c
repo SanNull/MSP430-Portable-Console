@@ -1,26 +1,6 @@
 #include "game.h"
 
-entidade listaEntidades[ENTIDADES_MAX] = {
-    {.x = 0, .y = 0, .yAnterior = 0, .xAnterior = 0}, //Jogador
-    //Zumbi
-     {.x = UINT16_MAX, .y = UINT16_MAX, .yAnterior = UINT16_MAX, .xAnterior = UINT16_MAX},
-      {.x = UINT16_MAX, .y = UINT16_MAX, .yAnterior = UINT16_MAX, .xAnterior = UINT16_MAX},
-       {.x = UINT16_MAX, .y = UINT16_MAX, .yAnterior = UINT16_MAX, .xAnterior = UINT16_MAX},
-        {.x = UINT16_MAX, .y = UINT16_MAX, .yAnterior = UINT16_MAX, .xAnterior = UINT16_MAX}, 
-        {.x = UINT16_MAX, .y = UINT16_MAX, .yAnterior = UINT16_MAX, .xAnterior = UINT16_MAX} //Bala
-};
-
-
 entidade *player;
-uint8_t direcaoBala = 0;
-uint8_t direcaoYBala = 0;
-
-typedef enum Estados {
-    SET,
-    GAMEOVER,
-    RESET
-}Estados;
-
 Estados estadoAtual = SET;
 
 //Game loop
@@ -38,11 +18,13 @@ static void balaProcess();
 static void gameover();
 static void reset();
 
+static void balaInput(Direcao dir);
+
 void GAME_init(){
     LCD_preencherTela(0x00);
     player = &listaEntidades[0];
     estadoAtual = SET;
-    setUpSpawner();
+    //setUpSpawner();
 }
 
 void GAME_loop(){
@@ -66,58 +48,71 @@ void GAME_loop(){
 }
 
 static void input(){
-    //Salva posição antes
+    int16_t prevDirX = player->x - player->xAnterior;
+    int16_t prevDirY = player->y - player->yAnterior;
+    //Salva posição no inicio de todo frame
     ENTIDADE_salvarPosicao(player);
     int8_t dirX = INPUT_getX();
     int8_t dirY = INPUT_getY();
 
-    //Bala
-
-    if (INPUT_getAction()){
-        entidade *bala = &listaEntidades[ENTIDADES_MAX - 1];
-        if (bala->x == UINT16_MAX && bala->y == UINT16_MAX) {
-            bala->x = player->x;
-            bala->y = player->y + TAMANHO_SPRITE;
-            bala->xAnterior = player->x + TAMANHO_SPRITE;
-            bala->yAnterior = player->y;
-            direcaoYBala = 1;
-        }
-    }
-
     //Prioriza Eixo X
     if (dirX != 0 && dirY != 0) {
         ENTIDADE_moverX(player, dirX, VELOCIDADE_PLAYER);
-        return;
     }
-    ENTIDADE_moverX(player, dirX, VELOCIDADE_PLAYER);
-    ENTIDADE_moverY(player, dirY, VELOCIDADE_PLAYER);
+    else {
+        ENTIDADE_moverX(player, dirX, VELOCIDADE_PLAYER);
+        ENTIDADE_moverY(player, dirY, VELOCIDADE_PLAYER);
+    }
 
+    //Bala
+    if (INPUT_getAction()) {
+        if (BALA_disponivel() == NULL){
+            return;
+        }
+        Direcao dir = DIREITA;
+        if (dirX != 0){
+            dir = (dirX == 1) ? DIREITA : ESQUERDA;
+        }
+        else if (dirY != 0){
+            dir = (dirY == 1) ? BAIXO : CIMA;
+        }
+        else{
+            //caso ele não tenha se movido esse frame
+        }
+        balaInput(dir);
+    }
+}
+
+static void balaInput(Direcao dir){
+    switch (dir) {
+        case BAIXO:
+        BALA_criar(player->x, player->y + TAMANHO_SPRITE, dir);
+        break;
+        case CIMA:
+        BALA_criar(player->x, player->y - TAMANHO_SPRITE, dir);
+        break;
+        case ESQUERDA:
+        BALA_criar(player->x - TAMANHO_SPRITE, player->y, dir);
+        break;
+        case DIREITA:
+        BALA_criar(player->x + TAMANHO_SPRITE, player->y, dir);
+        break;
+    }
 }
 
 static void processar(){
     balaProcess();
     zumbiProcess(); //Perseguiçao dos zumbis
     playerProcess();
-    uint16_t *v = SPAWN_podeSpawnar(); 
-    if (v != NULL){
+    uint16_t v = SPAWN_podeSpawnar(); 
+    if (v){
+        uint16_t x = SPAWN_localX();
+        uint16_t y = SPAWN_localY();
         uint8_t i = 1;
-        entidade *e = NULL;
-        for (i = 1; i < ENTIDADES_MAX; i++) {
-            e = &listaEntidades[i];
-            if (e->x == UINT16_MAX && e->y == UINT16_MAX){
-                break;
-            }
-            else {
-                e = NULL;
-            }
-        }
+        entidade *e = ZUMBI_disponivel(&listaEntidades);
         if (e != NULL){
-            e->x = v[0];
-            e->y = v[1];
-            e->xAnterior = v[0];
-            e->yAnterior = v[1];
+            ENTIDADE_habilitar(e, x, y);
         }
-        v = NULL;
     }
 }
 
@@ -180,19 +175,7 @@ static void playerProcess(){
 }
 
 static void balaProcess(){
-    ENTIDADE_salvarPosicao(&listaEntidades[ENTIDADES_MAX-1]);
-    if (direcaoBala == 0 && direcaoYBala == 0){
-        return;
-    }
-    if (direcaoBala){
-        ENTIDADE_moverX(&listaEntidades[ENTIDADES_MAX-1], direcaoBala, 12);
-    }
-    else {
-        ENTIDADE_moverY(&listaEntidades[ENTIDADES_MAX-1], direcaoYBala, 12);
-    }
-    if (listaEntidades[ENTIDADES_MAX-1].x >= LARGURA || listaEntidades[ENTIDADES_MAX-1].x < 0) {
-        ENTIDADE_tomarDano(&listaEntidades[ENTIDADES_MAX-1]);
-    }
+    BALA_process();
 }
 
 ///////////////////////////////////////

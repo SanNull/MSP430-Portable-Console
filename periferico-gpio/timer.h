@@ -11,7 +11,10 @@
     void PWMT_habilitarPino(bool enable);
     bool PWMT_estaParado(); //Checa se o TimerB está parado
 
-//Timer A
+//Timer T1
     void setUpTA(uint16_t ms);
     bool TA_flagUp();
+
+//ADC timer (T0)
+    void setupADCTimer();
 #endif

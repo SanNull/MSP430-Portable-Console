@@ -21,21 +21,22 @@ void BALA_process(){
     switch (dir) {
         case CIMA:
             ENTIDADE_moverY(e, -1, VELOCIDADE_BALA);
-            if (e->y <= 20 || e->y >= ALTURA) desabilitar = true;
+            if (e->y == e->yAnterior) desabilitar = true;
         break;
         case BAIXO:
             ENTIDADE_moverY(e, 1, VELOCIDADE_BALA);
-            if (e->y >= 270) desabilitar = true;
+             if (e->y == e->yAnterior) desabilitar = true;
         break;
         case ESQUERDA:
             ENTIDADE_moverX(e, -1, VELOCIDADE_BALA);
-             if (e->x <= 20 || e->x >= LARGURA) desabilitar = true;
+            if (e->x == e->xAnterior) desabilitar = true;
         break;
         case DIREITA:
             ENTIDADE_moverX(e, 1, VELOCIDADE_BALA);
-            if (e->x >= 190) desabilitar = true;
+             if (e->x == e->xAnterior) desabilitar = true;
         break;                        
     }
+    
     if (desabilitar){
         ENTIDADE_desabilitar(e);
         e = NULL;

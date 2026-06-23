@@ -40,7 +40,7 @@ bool PWMT_estaParado(){
 
 void setUpTA(uint16_t duracao){
     taFlag = false;
-    TA1CTL = TACLR | TASSEL__ACLK | MC__UP | ID_1;
+    TA1CTL = TACLR | TASSEL__ACLK | MC__UP | ID_3;
     TA1CCR0 = duracao;
     TA1CCTL0 |= CCIE;
 }
@@ -74,7 +74,6 @@ __interrupt void PWMT_isr(){
 
 #pragma vector = TIMER1_A0_VECTOR
 __interrupt void TA_isr(){
-    TA1CTL = TACLR | TASSEL__ACLK | MC__UP | ID_3;
-    TA1CCR0 = 0xffff;
+    TA1CTL = TACLR | MC__STOP;
     taFlag = true;
 }

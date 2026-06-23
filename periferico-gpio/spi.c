@@ -1,6 +1,6 @@
 #include "spi.h"
 
-#define MISO_PIN BIT0
+#define MOSI_PIN BIT0
 #define SCK BIT2
 
 void setUpSpi(){
@@ -16,7 +16,7 @@ void setUpSpi(){
     UCB0BR1 = 0;
 
     //Definição de Pino
-    P3SEL |= MISO_PIN + SCK;
+    P3SEL |= MOSI_PIN + SCK;
 
     UCB0CTL1 &= ~UCSWRST;
     UCB0IFG &= ~UCTXIFG;

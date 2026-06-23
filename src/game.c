@@ -24,7 +24,7 @@ void GAME_init(){
     LCD_preencherTela(0x00);
     player = &listaEntidades[0];
     estadoAtual = SET;
-    //setUpSpawner();
+    setUpSpawner();
 }
 
 void GAME_loop(){
@@ -122,20 +122,24 @@ static void renderizar(){
     for (i = 0; i < ENTIDADES_MAX; i++){
         e = &listaEntidades[i];
         if (e->x == UINT16_MAX && e->y == UINT16_MAX){
-            LCD_preencherRectangulo(e->x, e->y, TAMANHO_SPRITE, TAMANHO_SPRITE, 0x00);
+            LCD_preencherRectangulo(e->xAnterior, e->yAnterior, TAMANHO_SPRITE, TAMANHO_SPRITE, 0x00);
             continue;            
         }
         limparFrame(e);
             if (i == 0){
                 SPRITESHEET_desenharSprite(PLAYER, e->x, e->y);
             }
+            else if (i < ENTIDADES_MAX - 1){
+                SPRITESHEET_desenharSprite(ZUMBI, e->x, e->y);
+            }
             else {
-                SPRITESHEET_desenharSprite(PLAYER, e->x, e->y);
+                LCD_preencherRectangulo(e->x, e->y, TAMANHO_SPRITE/2, TAMANHO_SPRITE/2, 0xfd00);
             }        
     }
 }
 
 static void limparFrame(entidade *e){
+    LCD_preencherRectangulo(e->xAnterior, e->yAnterior, TAMANHO_SPRITE, TAMANHO_SPRITE, 0x00);
     if (e->x != e->xAnterior){
         LCD_preencherRectangulo(e->xAnterior, e->y, TAMANHO_SPRITE, TAMANHO_SPRITE, 0x00);
     }

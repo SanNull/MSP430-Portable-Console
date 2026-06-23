@@ -218,12 +218,12 @@ void LCD_desenharSprite(uint16_t *sprite, uint16_t x, uint16_t y, uint8_t tamanh
 			LCD_setCursor(x, ++y);
 			pixelColuna = 0;
 		}
-		if (sprite[i] == COR_MASCARA){
-			++i;
-			++pixelColuna;
-			LCD_setCursor(pixelColuna + x, y);
-			continue;
-		}
+		// if (sprite[i] == COR_MASCARA){
+		// 	++i;
+		// 	++pixelColuna;
+		// 	LCD_setCursor(pixelColuna + x, y);
+		// 	continue;
+		// }
 		LCD_desenharPixel(sprite[i++]);
 		pixelColuna++;
 	}

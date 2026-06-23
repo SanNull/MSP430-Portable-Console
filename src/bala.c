@@ -29,7 +29,7 @@ void BALA_process(){
         break;
         case ESQUERDA:
             ENTIDADE_moverX(e, -1, VELOCIDADE_BALA);
-             if (e->x <= 10 || e->x >= LARGURA) desabilitar = true;
+             if (e->x <= 20 || e->x >= LARGURA) desabilitar = true;
         break;
         case DIREITA:
             ENTIDADE_moverX(e, 1, VELOCIDADE_BALA);

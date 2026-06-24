@@ -9,12 +9,12 @@
 
 
 typedef enum TempoSpawn{
-    SEG5 = 40958,
     SEG3 = 24575,
-    SEG2 = 16383
+    SEG2 = 16383,
+    SEG1 = 16383/2
 } TempoSpawn;
 
-TempoSpawn tempoAtual = SEG5;
+TempoSpawn tempoAtual = SEG3;
 
 uint16_t posX = 0;
 uint16_t posY = 0;
@@ -29,7 +29,7 @@ typedef enum Posicoes {
 Posicoes spawnPosicao = BAIXO;
 
 void setUpSpawner(){
-    setUpTA(SEG5);
+    setUpTA(SEG3);
 }
 
 bool SPAWN_podeSpawnar(){
@@ -61,11 +61,11 @@ bool SPAWN_podeSpawnar(){
         break;
     }
     switch (tempoAtual) {
-        case SEG5:
+        case SEG1:
             tempoAtual = SEG2;
             break;
         case SEG3:
-            tempoAtual = SEG5;
+            tempoAtual = SEG1;
             break;
         case SEG2:
             tempoAtual = SEG3;

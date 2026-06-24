@@ -75,7 +75,7 @@ static void initLcd(){
 
 	enviarComando(0xB1);	// FRAME RATE CONTROL (IN NORMAL MODE / FULL COLORS)
 	enviarParametro(0x00);	// 1. (division ratio for internal clocks when Normal mode), default
-	enviarParametro(0x1F);	// 2. (frame frequency, 79Hz), 0x1B def. (70Hz)
+	enviarParametro(0x1b);	// 2. (frame frequency, 79Hz), 0x1B def. (70Hz)
 
 	enviarComando(0xB6); 	// DISPLAY FUNCTION CONTROL
 	enviarParametro(0x08);	// 1. (), 0x0A def.

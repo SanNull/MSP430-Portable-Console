@@ -16,6 +16,7 @@ void BALA_process(){
     if (e == NULL){
         return;
     }
+    if (e->x == UINT16_MAX) return;
     ENTIDADE_salvarPosicao(e);
     bool desabilitar = false;
     switch (dir) {

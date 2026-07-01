@@ -2,6 +2,7 @@
 
 entidade *player;
 Estados estadoAtual = SET;
+bool firstInit = true;
 
 //Game loop
 static void input();
@@ -21,10 +22,15 @@ static void reset();
 static void balaInput(Direcao dir);
 
 void GAME_init(){
-    LCD_preencherTela(0x00);
+    LCD_preencherTela(0x0);
     player = &listaEntidades[0];
     estadoAtual = SET;
     setUpSpawner();
+    SOM_habilitarMusica(true);
+    SOM_tocarNota(C4, 100);
+    SOM_tocarNota(523, 100);
+    SOM_tocarNota(2093, 200);
+  //  SOM_habilitarMusica(false);
 }
 
 void GAME_loop(){
@@ -37,7 +43,7 @@ void GAME_loop(){
             break;
             case GAMEOVER:
             __delay_cycles(500000*2);
-            LCD_preencherTela(0x00);
+            LCD_preencherTela(0x0);
             estadoAtual = RESET;
             break;
             case RESET:
@@ -139,12 +145,12 @@ static void renderizar(){
 }
 
 static void limparFrame(entidade *e){
-    LCD_preencherRectangulo(e->xAnterior, e->yAnterior, TAMANHO_SPRITE, TAMANHO_SPRITE, 0x00);
+    LCD_preencherRectangulo(e->xAnterior, e->yAnterior, TAMANHO_SPRITE, TAMANHO_SPRITE, 0x0);
     if (e->x != e->xAnterior){
-        LCD_preencherRectangulo(e->xAnterior, e->y, TAMANHO_SPRITE, TAMANHO_SPRITE, 0x00);
+        LCD_preencherRectangulo(e->xAnterior, e->y, TAMANHO_SPRITE, TAMANHO_SPRITE, 0x0);
     }
     else if (e->y != e->yAnterior) {
-        LCD_preencherRectangulo(e->x, e->yAnterior, TAMANHO_SPRITE, TAMANHO_SPRITE, 0x00);
+        LCD_preencherRectangulo(e->x, e->yAnterior, TAMANHO_SPRITE, TAMANHO_SPRITE, 0x0);
     } 
 }
 
@@ -174,7 +180,11 @@ static void zumbiProcess(){
 static void playerProcess(){
     if (player->x == UINT16_MAX && player->y == UINT16_MAX){
         estadoAtual = GAMEOVER;
-        SOM_tocarNota(C4, 1000);
+        SOM_tocarNota(C4, 100);
+        SOM_tocarNota(NENHUMA, 400);
+        SOM_tocarNota(65, 100);
+        SOM_tocarNota(NENHUMA, 400);
+        SOM_tocarNota(16, 800);
     }
 }
 

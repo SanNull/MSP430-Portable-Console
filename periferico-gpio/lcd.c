@@ -138,7 +138,7 @@ void setUpLcd(){
     P3OUT |= RESET + DC;
     P3OUT &= ~CS;
     initLcd();
-    //LCD_preencherTela(0x00);
+    LCD_preencherTela(0x00);
 }
 
 

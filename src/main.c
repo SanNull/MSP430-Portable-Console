@@ -9,6 +9,8 @@
 #include "entidade.h"
 #include "game.h"
 
+#include "testes/testes.h"
+
 int main(void)
 {
   WDTCTL = WDTPW+WDTHOLD;
@@ -23,8 +25,8 @@ int main(void)
   setUpLcd();
   setUpBotoes();
   setUpAdc();
-  // //LCD_preencherTela(0x00);
+ 
   GAME_init();
   GAME_loop();
-                  
+ // TEST_dpad();
 }
